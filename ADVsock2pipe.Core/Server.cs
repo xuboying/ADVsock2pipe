@@ -54,6 +54,8 @@ namespace Advtools.Advsock2pipe
         private string pipeName_;
         /// <summary>Logger for this instance</summary>
         private Logger logger_;
+        /// <summary>Wireshark option</summary>
+        private bool W;
         #endregion
 
         /// <summary>
@@ -81,6 +83,7 @@ namespace Advtools.Advsock2pipe
                 StartPipe();
                 // Then, start the TCP socket
                 StartSocket(config.Port);
+                W = config.W;
             }
             catch(SocketException e)
             {
@@ -232,6 +235,18 @@ namespace Advtools.Advsock2pipe
             logger_.Log(Level.Info, "Pipe connected");
             // Accept the connection
             pipe_.EndWaitForConnection(result);
+            if (W)
+            {
+                logger_.Log(Level.Info, "Writing wireshark global header to pipe(presume client is Wireshark)");
+                //modified for wireshark trace function, temporary hardcoded
+                //writing a struct pcap_hdr_s when wireshark client is connected
+                //https://wiki.wireshark.org/Development/LibpcapFileFormat
+                byte[] buffer = new byte[] { 0xd4, 0xc3, 0xb2, 0xa1, 0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x01, 0x00, 0x00, 0x00 };
+                pipe_.Write(buffer, 0, 24);
+            }
+            //
+
+
         }
 
         // Close the named pipe

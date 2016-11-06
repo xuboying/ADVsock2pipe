@@ -29,6 +29,8 @@ namespace Advtools.Advsock2pipe
     /// </summary>
     public class Config
     {
+        /// <summary>Wireshark global head</summary>
+        public bool W { get; private set; }
         /// <summary>TCP port number</summary>
         public int Port { get; private set; }
         /// <summary>Name of the pipe</summary>
@@ -58,10 +60,11 @@ namespace Advtools.Advsock2pipe
             // Definition of the command-line arguments and how to set the related configuration data
             var options = new OptionSet()
             {
-                { "pipe=", "Name of the pipe",          o => Pipe = o },
-                { "port=", "TCP port number",           (int o) => Port = o },
-                { "log=", "Level of messages to log",   (Level o) => LogLevel = o },
-                { "h|help", "Show this message",        o => help = o != null }
+                { "pipe=", "Name of the pipe",                          o => Pipe = o },
+                { "port=", "TCP port number",                           (int o) => Port = o },
+                { "log=", "Level of messages to log",                   (Level o) => LogLevel = o },
+                { "h|help", "Show this message",                        o => help = o != null },
+                { "W", "Automatical fill Wireshark global head",        o => W = o != null }
             };
 
             try
