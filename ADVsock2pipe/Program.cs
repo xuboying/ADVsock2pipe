@@ -20,6 +20,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+
 
 namespace Advtools.Advsock2pipe
 {
@@ -32,6 +34,9 @@ namespace Advtools.Advsock2pipe
         /// Entry point of the console application
         /// </summary>
         /// <param name="args">Command-line arguments</param>
+        /// 
+
+        static bool D = false;
         static void Main(string[] args)
         {
             ShowInformation();
@@ -60,7 +65,7 @@ namespace Advtools.Advsock2pipe
             Config config = new Config();
             if(!config.Parse(args))
                 return false;
-
+            D = config.D;
             // Create an instance of the server and start it with the configuration
             Server server = new Server();
             return server.Start(config);
@@ -73,15 +78,22 @@ namespace Advtools.Advsock2pipe
         {
             for(; ; )
             {
-                // Let the user stop this application
-                Console.WriteLine();
-                Console.WriteLine("Press any key to stop...");
-                Console.WriteLine();
-                Console.ReadKey(true);
-                Console.WriteLine("Stop the application? Press Escape to stop");
-                ConsoleKeyInfo info = Console.ReadKey(true); 
-                if(info.Key == ConsoleKey.Escape)
-                    break;
+                if (!D)
+                {
+                    // Let the user stop this application
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to stop...");
+                    Console.WriteLine();
+                    Console.ReadKey(true);
+                    Console.WriteLine("Stop the application? Press Escape to stop");
+                    ConsoleKeyInfo info = Console.ReadKey(true);
+                    if (info.Key == ConsoleKey.Escape)
+                        break;
+                }
+                else
+                {
+                    Thread.Sleep(10);
+                }
             }
             Console.WriteLine("stopping...");
         }

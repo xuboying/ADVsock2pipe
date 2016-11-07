@@ -29,6 +29,8 @@ namespace Advtools.Advsock2pipe
     /// </summary>
     public class Config
     {
+        /// <summary>Daemon Mode</summary>
+        public bool D { get; private set; }
         /// <summary>Wireshark global head</summary>
         public bool W { get; private set; }
         /// <summary>TCP port number</summary>
@@ -64,7 +66,8 @@ namespace Advtools.Advsock2pipe
                 { "port=", "TCP port number",                           (int o) => Port = o },
                 { "log=", "Level of messages to log",                   (Level o) => LogLevel = o },
                 { "h|help", "Show this message",                        o => help = o != null },
-                { "W", "Automatical fill Wireshark global head",        o => W = o != null }
+                { "W", "Automatical fill Wireshark global head",        o => W = o != null }, 
+                { "D", "Daemon mode, no waiting for user input(stop)",  o => D = o != null }
             };
 
             try
