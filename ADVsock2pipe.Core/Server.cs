@@ -147,7 +147,17 @@ namespace Advtools.Advsock2pipe
         private void OnReceive(IAsyncResult result)
         {
             // Ends a pending asynchronous read
-            int read = socket_.EndReceive(result);
+            int read;
+            try
+            {
+                read = socket_.EndReceive(result);
+            }
+            catch (SocketException e)
+            {
+                logger_.Log(Level.Info, "End of data. TCP port disconnected.");
+                CloseSocket();
+                return;
+            }
             // Any data?
             if(read <= 0)
             {
